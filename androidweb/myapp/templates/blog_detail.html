@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+  <div class="row">
+
+    <!-- BLOG CONTENT -->
+    <div class="col-lg-8">
+
+      <h1 class="fw-bold">{{ post.title }}</h1>
+      <p class="text-muted">{{ post.created_at|date:"F d, Y" }} · {{ post.category.name }}</p>
+
+      <img src="{{ post.image.url }}" class="img-fluid rounded shadow mb-4">
+
+      <div class="fs-5 lh-lg mb-5">
+        {{ post.content|linebreaks }}
+      </div>
+
+      <!-- COMMENT FORM -->
+      <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body">
+          <h4>💬 Leave a Comment</h4>
+
+          <form method="POST">
+            {% csrf_token %}
+
+            <input type="text" name="name" class="form-control mb-2" placeholder="Your Name" required>
+
+            <input type="email" name="email" class="form-control mb-2" placeholder="Your Email" required>
+
+            <textarea name="comment" class="form-control mb-2" rows="3" placeholder="Your Comment..." required></textarea>
+
+            <button class="btn btn-primary">Submit Comment</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- SHOW COMMENTS -->
+      <h4>Comments ({{ comments.count }})</h4>
+
+      {% for c in comments %}
+      <div class="card mb-2 border-0 shadow-sm rounded-4">
+        <div class="card-body">
+          <strong>{{ c.name }}</strong>
+          <small class="text-muted">{{ c.created_at|date:"d M Y H:i" }}</small>
+          <p class="mb-0">{{ c.comment }}</p>
+        </div>
+      </div>
+      {% empty %}
+      <p>No comments yet. Be the first!</p>
+      {% endfor %}
+
+    </div>
+
+    <!-- TRENDING SIDEBAR -->
+    <div class="col-lg-4">
+
+      <div class="trending-box">
+        <h5> Trending</h5>
+
+        {% for post in trending %}
+        <div class="trending-item mb-2">
+          <img src="{{ post.image.url }}" width="70" height="55">
+          <small>
+            <a href="{% url 'blog_detail' post.slug %}">
+              {{ post.title|truncatewords:8 }}
+            </a>
+          </small>
+        </div>
+        {% endfor %}
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- SUGGESTED POSTS -->
+  <hr class="my-5">
+
+  <h3 class="mb-3">📰 Suggested Posts</h3>
+
+  <div class="row">
+
+    {% for post in suggested %}
+    <div class="col-md-4">
+      <div class="card latest-card mb-3">
+        <img src="{{ post.image.url }}" class="card-img-top" style="height:180px; object-fit:cover;">
+        <div class="card-body">
+          <h6>{{ post.title|truncatewords:10 }}</h6>
+          <a href="{% url 'blog_detail' post.slug %}" class="btn btn-sm btn-outline-primary rounded-pill">Read</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+
+</div>
+
+{% endblock %}

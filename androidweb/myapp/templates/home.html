@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-fluid mt-3">
+
+  <!-- ======= SLIDER ======= -->
+  <div id="mainCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+    <div class="carousel-inner rounded-4 shadow">
+
+      {% for post in featured %}
+      <div class="carousel-item {% if forloop.first %}active{% endif %}">
+        <img src="{{ post.image.url }}" class="d-block w-100" style="height:380px; object-fit:cover;">
+        <div class="carousel-caption bg-dark bg-opacity-50 rounded p-3">
+          <h5>{{ post.title }}</h5>
+          <a href="{% url 'blog_detail' post.slug %}" class="btn btn-sm btn-primary rounded-pill">Read</a>
+        </div>
+      </div>
+      {% endfor %}
+
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+  </div>
+
+  <div class="row">
+
+    <!-- ======= LATEST POSTS ======= -->
+    <div class="col-lg-8">
+
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4>-LATEST POST-</h4>
+      </div>
+
+      <div class="row">
+
+        {% for post in page_obj %}
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card latest-card h-100">
+
+            <img src="{{ post.image.url }}" class="card-img-top">
+
+            <div class="card-body d-flex flex-column">
+              <h6>{{ post.title|truncatewords:8 }}</h6>
+              <p class="text-muted small">{{ post.created_at|date:"M d, Y" }}</p>
+
+              <a href="{% url 'blog_detail' post.slug %}" class="btn btn-sm btn-outline-primary mt-auto rounded-pill">Read</a>
+            </div>
+
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+
+      <!-- ======= PAGINATION ======= -->
+      <nav>
+        <ul class="pagination justify-content-center">
+
+          {% if page_obj.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+          </li>
+          {% endif %}
+
+          {% for num in page_obj.paginator.page_range %}
+          <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+          </li>
+          {% endfor %}
+
+          {% if page_obj.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+          </li>
+          {% endif %}
+
+        </ul>
+      </nav>
+
+    </div>
+
+    <!-- ======= TRENDING SIDEBAR ======= -->
+    <div class="col-lg-4">
+
+      <div class="trending-box mb-4">
+        <h5>-TRENDING-</h5>
+
+        {% for post in trending %}
+        <div class="trending-item">
+          <img src="{{ post.image.url }}" width="75" height="60">
+          <small>
+            <a href="{% url 'blog_detail' post.slug %}">
+              {{ post.title|truncatewords:8 }}
+            </a>
+          </small>
+        </div>
+        {% endfor %}
+
+      </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock %}

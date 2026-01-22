@@ -1,0 +1,20 @@
+from django.shortcuts import render, get_object_or_404
+from .models import Blog, Category
+
+def blog_list(request):
+    featured = Blog.objects.filter(is_featured=True).order_by('-created_at')[:1]
+    latest = Blog.objects.filter(is_featured=False).order_by('-created_at')[:9]
+    trending = Blog.objects.all().order_by('-created_at')[:5]
+
+    context = {
+        'featured': featured,
+        'latest': latest,
+        'trending': trending,
+    }
+
+    return render(request, 'home.html', context)
+
+
+def blog_detail(request, slug):
+    blog = get_object_or_404(Blog, slug=slug)
+    return render(request, 'blog_detail.html', {'blog': blog})

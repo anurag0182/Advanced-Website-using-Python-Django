@@ -1,0 +1,35 @@
+
+body {
+    background: rgb(212, 203, 203) !important;
+}
+
+.blog-box {
+    background: #a31919;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.blog-title {
+    font-size: 8px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.blog-meta {
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 15px;
+}
+
+.blog-img {
+    width: 100%;
+    border-radius: 14px;
+    margin: 15px 0;
+}
+
+.blog-content {
+    font-size: 13px;
+    line-height: 1;
+    color: #221e1e;
+}
